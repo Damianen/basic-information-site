@@ -1,0 +1,12 @@
+{
+  "name": "basic-information-site",
+  "version": "1.0.0",
+  "description": "This is my first ever nodejs app. Its a very simple app that has 4 different html pages.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}
