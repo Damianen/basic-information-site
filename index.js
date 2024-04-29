@@ -1,24 +1,33 @@
-import http from 'http';
-import fs from 'fs';
-import fsp from 'fs/promises';
-import url from 'url';
+import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 
-http.createServer(async (req, res) => {
-    let q = url.parse(req.url, true);
-    let filename = '.' + q.pathname;
-    if (filename === './') {
-        filename = './index.html';
-    }
-    try {
-        const data = await fsp.readFile(filename);
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(data);
-        return res.end();
-    } catch (err) {
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        fs.readFile("./404.html", (err, data) => {
-            res.write(data);
-            return res.end();
-        });
-    }    
-}).listen(8080);
+const app = express();
+const port = 3000;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.get("/", (req, res) => {
+    const options = {
+        root: path.join(__dirname)
+    };
+
+    res.sendFile("index.html", options);
+});
+
+app.get("/:name", (req, res) => {
+    const options = {
+        root: path.join(__dirname)
+    };
+
+    let fileName = req.params.name;
+
+    res.sendFile(fileName, options, (err) => {
+        res.sendFile('404.html', options);
+    });
+});
+
+
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}!`);
+});
